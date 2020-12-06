@@ -93,13 +93,13 @@
         trees (+ trees (get-loc x y data))]
     (assoc state :x x :y y :trees trees)))
 
-(defn run [file [right down]]
-  (let [data (load-data file)]
-    (->> (init-state data right down)
-         (iterate update-state)
-         (take (/ (count data) down))
-         (last)
-         (:trees))))
+#_ (defn run [file [right down]]
+     (let [data (load-data file)]
+       (->> (init-state data right down)
+            (iterate update-state)
+            (take (/ (count data) down))
+            (last)
+            (:trees))))
 
 #_ (run "resources/3.txt" [3 1])
 
@@ -214,9 +214,24 @@
 ;;; day 6
 ;; part 1
 
+(defn load-data [file]
+  (-> (slurp file)
+      (str/split #"\n\n")))
 
+#_ (->> (load-data "resources/test6.txt")
+        (map #(str/replace % #"\n" ""))
+        (map #(str/split % #""))
+        (map #(into #{} %))
+        (map count)
+        (apply +))
 
+;; part 2
 
-
-
+#_ (->> (load-data "resources/6.txt")
+        (map str/split-lines)
+        (map (fn [x] (map #(str/split % #"") x)))
+        (map (fn [x] (map #(into #{} %) x)))
+        (map #(apply set/intersection %))
+        (map count)
+        (apply +))
 
